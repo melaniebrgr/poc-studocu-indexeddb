@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
-const IDB_ID = 'studocu';
-const IDB_COLLECTION_ID = 'notes';
-const version = 1;
+export const IDB_ID = 'studocu';
+export const IDB_COLLECTION_ID = 'notes';
+export const version = 1;
 
 export const useIDB = () => {
   const [db, setDb] = useState<IDBDatabase | null>(null);
@@ -12,8 +12,9 @@ export const useIDB = () => {
     const NotesIDBOpenRequest = indexedDB.open(IDB_ID, version);
   
     NotesIDBOpenRequest.addEventListener('upgradeneeded', (event: IDBVersionChangeEvent) => {
-      // @ts-expect-error i know better
-      const db = event.target.result;
+
+      // @ts-expect-error result is present
+      const db = event?.target?.result;
       
       setDb(db);
   
