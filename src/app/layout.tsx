@@ -28,7 +28,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <h1 className="text-4xl font-bold text-black text-center py-4">
+          Indexed DB in Next.js
+        </h1>
+        <main className="preview flex min-h-[350px] w-full justify-center p-10 items-center">
+          {children}
+        </main>
       </body>
     </html>
   );
