@@ -5,8 +5,8 @@ export const IDB_STORE_ID = 'notes';
 
 export const version = 2;
 
-const connectDB = (dbId: string, dbStoreId: string) => {
-  let db, objectStore;
+const connectDB = (dbId: string, dbStoreId: string, onOpenedConnection: (db: IDBDatabase) => void) => {
+  let objectStore;
 
   const openRequest: IDBOpenDBRequest = indexedDB.open(dbId, version);
 
@@ -15,12 +15,14 @@ const connectDB = (dbId: string, dbStoreId: string) => {
   }
 
   openRequest.onsuccess = () => {
-    db = openRequest.result;
+    const db = openRequest.result;
+    onOpenedConnection(db);
     console.info('>>> DB opened', db);
   }
 
   openRequest.onupgradeneeded = (event: IDBVersionChangeEvent) => {
-    db = openRequest.result;
+    const db = openRequest.result;
+    onOpenedConnection(db);
     console.info(`>>> DB ugraded from ${event.oldVersion} to ${event.newVersion}`, db);
 
     if (!db.objectStoreNames.contains(dbStoreId)) {
@@ -34,10 +36,10 @@ const connectDB = (dbId: string, dbStoreId: string) => {
 }
 
 export const useIDB = () => {
-  const [db] = useState<IDBDatabase | null>(null);
+  const [db, setDb] = useState<IDBDatabase | null>(null);
   
   useEffect(() => {
-    connectDB(IDB_ID, IDB_STORE_ID);
+    connectDB(IDB_ID, IDB_STORE_ID, setDb);
   }, []);
 
   return { db };

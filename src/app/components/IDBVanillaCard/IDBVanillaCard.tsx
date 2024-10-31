@@ -44,9 +44,9 @@ export default function IDBVanillaCard() {
  
   function onSubmit({ title }: z.infer<typeof formSchema>) {
     
-    const tx = db?.transaction(IDB_STORE_ID, 'readwrite');
+    const tx = db!.transaction(IDB_STORE_ID, 'readwrite');
 
-    const txNotes = tx?.objectStore(IDB_STORE_ID);
+    const txNotes = tx!.objectStore(IDB_STORE_ID);
 
     txNotes?.add({
       id: uuid(),
