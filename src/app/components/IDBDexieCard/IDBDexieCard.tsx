@@ -52,6 +52,7 @@ export default function IDBDexieCard() {
       <Card className="w-[350px]">
         <CardHeader>
           <CardTitle>Dexie IndexedDB</CardTitle>
+          <CardDescription>This example uses the Dexie library.</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>

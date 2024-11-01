@@ -59,6 +59,7 @@ export default function IDBVanillaCard() {
       <Card className="w-[350px]">
         <CardHeader>
           <CardTitle>Vanilla JS IndexedDB</CardTitle>
+          <CardDescription>This example uses the raw IndexedDB API.</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
