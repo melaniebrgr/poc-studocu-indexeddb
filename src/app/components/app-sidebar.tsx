@@ -12,23 +12,10 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
-import { getTransaction, useIDB } from "@/app/components/IDBVanillaCard/useIDB";
-import { useEffect, useState } from "react";
-
-interface Summary { id: string, title: string }
+import { useGetAllSummaries } from "@/app/components/IDBVanillaCard/useIDB";
 
 export function AppSidebar() {
-  const { db } = useIDB();
-  const [summaries, setSummaries] = useState<Summary[]>([]);
-
-  useEffect(() => {
-    if (!db) return;
-    const txRead = getTransaction(db, 'readonly');
-    const request = txRead!.getAll();
-    request.onsuccess = () => {
-      setSummaries(request.result);
-    }
-  }, [db]);
+  const summaries = useGetAllSummaries();
 
   return (
     <Sidebar>

@@ -35,16 +35,34 @@ const connectDB = (dbId: string, dbStoreId: string, onOpenedConnection: (db: IDB
   };
 }
 
-export const getTransaction = (db: IDBDatabase | null, mode: IDBTransactionMode) => {
-  return db?.transaction(IDB_STORE_ID, mode).objectStore(IDB_STORE_ID);
-};
-
 export const useIDB = () => {
   const [db, setDb] = useState<IDBDatabase | null>(null);
   
   useEffect(() => {
     connectDB(IDB_ID, IDB_STORE_ID, setDb);
   }, []);
-
+  
   return { db };
+}
+
+export const getTransaction = (db: IDBDatabase | null, mode: IDBTransactionMode) => {
+  return db?.transaction(IDB_STORE_ID, mode).objectStore(IDB_STORE_ID);
+};
+
+interface Summary { id: string, title: string }
+
+export const useGetAllSummaries = () => {
+  const { db } = useIDB();
+  const [summaries, setSummaries] = useState<Summary[]>([]);
+
+  useEffect(() => {
+    if (!db) return;
+    const txRead = getTransaction(db, 'readonly');
+    const request = txRead!.getAll();
+    request.onsuccess = () => {
+      setSummaries(request.result);
+    }
+  }, [db]);
+
+  return summaries
 }
