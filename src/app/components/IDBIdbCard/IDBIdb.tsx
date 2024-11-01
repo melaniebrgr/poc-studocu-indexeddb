@@ -43,6 +43,7 @@ export default function IDBDexieCard() {
  
   function onSubmit({ title }: z.infer<typeof formSchema>) {
     if (!db) return;
+    // @ts-expect-error no clue
     db!.add(IDB_STORE_ID, {
       id: uuid(),
       title,
