@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { AppSidebar } from "@/components/ui/app-sidebar"
 import "./globals.css";
 
 const geistSans = localFont({
@@ -31,9 +33,12 @@ export default function RootLayout({
         <h1 className="text-4xl font-bold text-black text-center py-4">
           Indexed DB in Next.js
         </h1>
-        <main className="preview flex min-h-[350px] w-full justify-center p-10 items-center">
-          {children}
-        </main>
+        <SidebarProvider>
+          <AppSidebar />
+          <main className="preview flex min-h-[350px] w-full justify-center p-10 items-center">
+            {children}
+          </main>
+        </SidebarProvider>
       </body>
     </html>
   );
