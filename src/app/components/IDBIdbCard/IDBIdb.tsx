@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 
-import { db, IDB_STORE_ID } from "./db";
+import { useIDB, IDB_STORE_ID } from "./useIDB";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -32,6 +32,8 @@ const formSchema = z.object({
 })
 
 export default function IDBDexieCard() {
+  const { db } = useIDB();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -40,7 +42,8 @@ export default function IDBDexieCard() {
   })
  
   function onSubmit({ title }: z.infer<typeof formSchema>) {
-    db[IDB_STORE_ID].add({
+    if (!db) return;
+    db!.add(IDB_STORE_ID, {
       id: uuid(),
       title,
     });
@@ -50,8 +53,8 @@ export default function IDBDexieCard() {
   return (
       <Card className="w-[350px]">
         <CardHeader>
-          <CardTitle>Dexie IndexedDB</CardTitle>
-          <CardDescription>This example uses the Dexie library (31KB). It has an IDB observable and good TS support.</CardDescription>
+          <CardTitle>IDB IndexedDB</CardTitle>
+          <CardDescription>This example uses the IDB library (1.4KB). It promisifies the IndexedDB. Offers some TS support.</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
