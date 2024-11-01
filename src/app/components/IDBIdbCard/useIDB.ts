@@ -42,3 +42,20 @@ const connectDB = async (dbId: string, dbStoreId: typeof IDB_STORE_ID, onOpenedC
   // @ts-expect-error no clue
   onOpenedConnection(db);
 }
+
+export const useGetAllSummaries = () => {
+  const { db } = useIDB();
+  const [summaries, setSummaries] = useState<Summary[]>([]);
+
+  useEffect(() => {
+    if (!db) return;
+
+    get(db, setSummaries);
+  }, [db]);
+
+  return summaries
+}
+
+export async function get(db: Promise<IDBDatabase>, onSuccess: (value: any) => void) {
+  (await db).getAll(IDB_STORE_ID).then(onSuccess);
+}

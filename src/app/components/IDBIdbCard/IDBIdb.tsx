@@ -54,7 +54,7 @@ export default function IDBDexieCard() {
       <Card className="w-[350px]">
         <CardHeader>
           <CardTitle>IDB IndexedDB</CardTitle>
-          <CardDescription>This example uses the IDB library (1.4KB). It promisifies the IndexedDB. Offers some TS support.</CardDescription>
+          <CardDescription>This example uses the IDB library (1.4KB). It promisifies the IndexedDB. Offers TS support but not straightforward. Docs just ok.</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
