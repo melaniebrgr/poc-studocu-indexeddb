@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 
-export const IDB_ID = 'studocu';
-export const IDB_STORE_ID = 'notes';
+export const IDB_ID = 'studocu-notes-vanilla';
+export const IDB_STORE_ID = 'summaries';
 
-export const version = 2;
+export const version = 1;
 
 const connectDB = (dbId: string, dbStoreId: string, onOpenedConnection: (db: IDBDatabase) => void) => {
-  let objectStore;
-
   const openRequest: IDBOpenDBRequest = indexedDB.open(dbId, version);
 
   openRequest.onerror = () => {
@@ -17,21 +15,19 @@ const connectDB = (dbId: string, dbStoreId: string, onOpenedConnection: (db: IDB
   openRequest.onsuccess = () => {
     const db = openRequest.result;
     onOpenedConnection(db);
-    console.info('>>> DB opened', db);
   }
 
   openRequest.onupgradeneeded = (event: IDBVersionChangeEvent) => {
     const db = openRequest.result;
-    onOpenedConnection(db);
     console.info(`>>> DB ugraded from ${event.oldVersion} to ${event.newVersion}`, db);
-
+    
     if (!db.objectStoreNames.contains(dbStoreId)) {
-      objectStore = db.createObjectStore(dbStoreId, {
+      db.createObjectStore(dbStoreId, {
         keyPath: 'id',
       })
-
-      console.info('>>> DB object store created', objectStore);
     }
+
+    onOpenedConnection(db);
   };
 }
 
@@ -46,6 +42,7 @@ export const useIDB = () => {
 }
 
 export const getTransaction = (db: IDBDatabase | null, mode: IDBTransactionMode) => {
+  // TODO: track if is connecting or version is changing and do not do anything
   return db?.transaction(IDB_STORE_ID, mode).objectStore(IDB_STORE_ID);
 };
 
