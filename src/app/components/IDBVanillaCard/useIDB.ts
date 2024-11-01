@@ -35,6 +35,10 @@ const connectDB = (dbId: string, dbStoreId: string, onOpenedConnection: (db: IDB
   };
 }
 
+export const getTransaction = (db: IDBDatabase | null, mode: IDBTransactionMode) => {
+  return db?.transaction(IDB_STORE_ID, mode).objectStore(IDB_STORE_ID);
+};
+
 export const useIDB = () => {
   const [db, setDb] = useState<IDBDatabase | null>(null);
   
@@ -44,4 +48,3 @@ export const useIDB = () => {
 
   return { db };
 }
-

@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 
-import { useIDB, IDB_STORE_ID } from "./useIDB";
+import { useIDB, getTransaction } from "./useIDB";
 
 const formSchema = z.object({
   title: z.string().min(2, {
@@ -34,7 +34,7 @@ const formSchema = z.object({
 
 export default function IDBVanillaCard() {
   const { db } = useIDB();
-
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -43,12 +43,9 @@ export default function IDBVanillaCard() {
   })
  
   function onSubmit({ title }: z.infer<typeof formSchema>) {
-    
-    const tx = db!.transaction(IDB_STORE_ID, 'readwrite');
+    const txReadWrite = getTransaction(db, 'readwrite');
 
-    const txNotes = tx!.objectStore(IDB_STORE_ID);
-
-    txNotes?.add({
+    txReadWrite?.add({
       id: uuid(),
       title,
     });
