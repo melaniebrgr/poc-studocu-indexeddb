@@ -1,29 +1,78 @@
-'use client'
+"use client"
 
-import { useState } from "react";
+import { z } from "zod"
+import { v4 as uuid } from "uuid"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+
+import { Button } from "@/components/ui/button"
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
 
 import { db, IDB_STORE_ID } from "./db";
 
-export default function AddFriendForm() {
-  const [title, setTitle] = useState('');
+const formSchema = z.object({
+  title: z.string().min(2, {
+    message: "Title must be at least 2 characters.",
+  }),
+})
 
-  async function addFriend() {
-    await db[IDB_STORE_ID].add({
-      id: Date.now().toString(),
+export default function IDBDexieCard() {
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      title: "",
+    },
+  })
+ 
+  function onSubmit({ title }: z.infer<typeof formSchema>) {
+    db[IDB_STORE_ID].add({
+      id: uuid(),
       title,
     });
-    setTitle('');
+    form.reset();
   }
 
   return (
-    <>
-      Title:
-      <input
-        type="text"
-        value={title}
-        onChange={(ev) => setTitle(ev.target.value)}
-      />
-      <button onClick={addFriend}>Add</button>
-    </>
+      <Card className="w-[350px]">
+        <CardHeader>
+          <CardTitle>Dexie IndexedDB</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Title</FormLabel>
+                    <FormControl>
+                      <Input placeholder="My magic summary" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            <Button type="submit">Submit</Button>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
   );
 }

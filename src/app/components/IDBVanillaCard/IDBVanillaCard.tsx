@@ -43,19 +43,22 @@ export default function IDBVanillaCard() {
   })
  
   function onSubmit({ title }: z.infer<typeof formSchema>) {
-    const txReadWrite = getTransaction(db, 'readwrite');
-    txReadWrite?.add({
-      id: uuid(),
-      title,
-    });
-    form.reset();
+    try {
+      const txReadWrite = getTransaction(db, 'readwrite');
+      txReadWrite?.add({
+        id: uuid(),
+        title,
+      });
+      form.reset();
+    } catch (err) {
+      console.error(err);
+    }
   }
 
   return (
       <Card className="w-[350px]">
         <CardHeader>
           <CardTitle>Vanilla JS IndexedDB</CardTitle>
-          <CardDescription>Submit your AI Notes summaries.</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -69,9 +72,6 @@ export default function IDBVanillaCard() {
                     <FormControl>
                       <Input placeholder="My magic summary" {...field} />
                     </FormControl>
-                    <FormDescription>
-                      This is your summary title.
-                    </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
