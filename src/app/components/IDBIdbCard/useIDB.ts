@@ -56,6 +56,8 @@ export const useGetAllSummaries = () => {
   return summaries
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export async function get(db: Promise<IDBDatabase>, onSuccess: (value: any) => void) {
+  // @ts-expect-error it exists
   (await db).getAll(IDB_STORE_ID).then(onSuccess);
 }
