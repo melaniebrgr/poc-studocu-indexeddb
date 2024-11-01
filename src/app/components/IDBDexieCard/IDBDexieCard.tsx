@@ -9,7 +9,6 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -52,7 +51,7 @@ export default function IDBDexieCard() {
       <Card className="w-[350px]">
         <CardHeader>
           <CardTitle>Dexie IndexedDB</CardTitle>
-          <CardDescription>This example uses the Dexie library.</CardDescription>
+          <CardDescription>This example uses the Dexie library (31KB). It has an IDB observable.</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
