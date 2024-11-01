@@ -44,11 +44,11 @@ export default function IDBVanillaCard() {
  
   function onSubmit({ title }: z.infer<typeof formSchema>) {
     const txReadWrite = getTransaction(db, 'readwrite');
-
     txReadWrite?.add({
       id: uuid(),
       title,
     });
+    form.reset();
   }
 
   return (
